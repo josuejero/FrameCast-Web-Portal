@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_photo_editor.css') }}">
+    <title>Photo Editor</title>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/" class="navbar-item">DEVICE MANAGER</a>
+        <a href="/device-editor" class="navbar-item">DEVICE EDITOR</a>
+        <a href="/photo-editor" class="navbar-item highlight">PHOTO EDITOR</a>
+    </header>
+    <main class="main-content">
+        <section class="photo-list-section">
+            <h2 class="section-title">PHOTOS</h2>
+            <div class="photo-list">
+                <label><input type="radio" name="photo"> Photo1</label>
+                <label><input type="radio" name="photo"> Photo2</label>
+                <label><input type="radio" name="photo"> Photo3</label>
+                <label><input type="radio" name="photo"> Photo4</label>
+                <label><input type="radio" name="photo"> Photo5</label>
+                <label><input type="radio" name="photo"> Photo6</label>
+                <label><input type="radio" name="photo"> Photo7</label>
+                <label><input type="radio" name="photo"> Photo8</label>
+                <label><input type="radio" name="photo"> Photo9</label>
+                <label><input type="radio" name="photo"> Photo10</label>
+                <label><input type="radio" name="photo"> Photo11</label>
+                <label><input type="radio" name="photo"> Photo12</label>
+            </div>
+            <button class="action-button upload-button">UPLOAD NEW PHOTOS</button>
+        </section>
+        <section class="photo-display-panel">
+            <div class="photo-controls">
+                <button class="action-button rotate-ccw">ROTATE CCW</button>
+                <button class="action-button rotate-cw">ROTATE CW</button>
+                <button class="action-button scale">SCALE</button>
+                <input type="number" class="scale-input" value="100" min="10" max="100">
+                <span>%</span>
+                <button class="action-button save">SAVE</button>
+            </div>
+            <h2 class="section-title">Photo Display</h2>
+            <div class="photo-container">
+                <img src="path/to/your/image.jpg" alt="Preview" class="preview-image">
+                <div class="window-box"></div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

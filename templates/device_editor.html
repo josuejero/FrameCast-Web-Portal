@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_device_editor.css') }}">
+    <title>Device Editor</title>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/" class="navbar-item">DEVICE MANAGER</a>
+        <a href="/device-editor" class="navbar-item highlight">DEVICE EDITOR</a>
+        <a href="/photo-editor" class="navbar-item">PHOTO EDITOR</a>
+    </header>
+    <main class="main-content">
+        <section class="photo-list-section">
+            <h2 class="section-title">PHOTOS</h2>
+            <div class="photo-list">
+                <label><input type="checkbox" name="photo"> Photo1</label>
+                <label><input type="checkbox" name="photo"> Photo2</label>
+                <label><input type="checkbox" name="photo"> Photo3</label>
+                <label><input type="checkbox" name="photo"> Photo4</label>
+                <label><input type="checkbox" name="photo"> Photo5</label>
+                <label><input type="checkbox" name="photo"> Photo6</label>
+                <label><input type="checkbox" name="photo"> Photo7</label>
+                <label><input type="checkbox" name="photo"> Photo8</label>
+                <label><input type="checkbox" name="photo"> Photo9</label>
+                <label><input type="checkbox" name="photo"> Photo10</label>
+                <label><input type="checkbox" name="photo"> Photo11</label>
+                <label><input type="checkbox" name="photo"> Photo12</label>
+            </div>
+            <div class="preview">
+                <h3>PREVIEW</h3>
+                <img src="path/to/your/image.jpg" alt="Preview" class="preview-image">
+            </div>
+        </section>
+        <button class="action-button add-to-devices">ADD TO DEVICES</button>
+        <section class="device-list-section">
+            <h2 class="section-title">DEVICES</h2>
+            <div class="device-list">
+                <label><input type="checkbox" name="device"> Device1</label>
+                <label><input type="checkbox" name="device"> Device2</label>
+                <label><input type="checkbox" name="device"> Device3</label>
+                <label><input type="checkbox" name="device"> Device4</label>
+                <label><input type="checkbox" name="device"> Device5</label>
+                <label><input type="checkbox" name="device"> Device6</label>
+                <label><input type="checkbox" name="device"> Device7</label>
+                <label><input type="checkbox" name="device"> Device8</label>
+            </div>
+        </section>
+        <section class="device-config-pane">
+            <h2 class="section-title">DEVICE CONFIGURATION</h2>
+            <div class="config-item">
+                <label for="device-name">Device Name:</label>
+                <input type="text" id="device-name" name="device-name" value="DeviceName1">
+            </div>
+            <div class="config-item">
+                <label for="photo-update-frequency">Photo Update Frequency (seconds):</label>
+                <input type="number" id="photo-update-frequency" name="photo-update-frequency" min="0" max="999" value="15">
+            </div>
+            <div class="config-item">
+                <label for="random-order">Randomize Order:</label>
+                <input type="checkbox" id="random-order" name="random-order" checked>
+            </div>
+            <div class="config-item">
+                <h3>PAIRED PHOTOS</h3>
+                <div class="assigned-photo-list">
+                    <label><input type="radio" name="assigned-photo"> Photo1</label>
+                    <label><input type="radio" name="assigned-photo"> Photo2</label>
+                    <label><input type="radio" name="assigned-photo"> Photo3</label>
+                    <label><input type="radio" name="assigned-photo"> Photo4</label>
+                    <label><input type="radio" name="assigned-photo"> Photo5</label>
+                    <label><input type="radio" name="assigned-photo"> Photo6</label>
+                </div>
+                <div class="button-group">
+                    <button class="action-button move-up">MOVE UP</button>
+                    <button class="action-button move-down">MOVE DOWN</button>
+                    <button class="action-button remove">REMOVE</button>
+                </div>
+                <div class="preview">
+                    <img src="path/to/your/image.jpg" alt="Preview" class="preview-image">
+                </div>
+            </div>
+            <button class="action-button save-config">SAVE DEVICE CONFIGURATION</button>
+        </section>
+    </main>
+</body>
+
+</html>
