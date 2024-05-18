@@ -16,7 +16,7 @@ def photo_editor():
 
 @app.route('/api/find_discoverable_bluetooth_devices', methods=['GET'])
 def find_discoverable_bluetooth_devices():
-    discovered_devices={
+    discovered_devices = {
         "00:11:22:33:44:55": {"device_name": "Device1", "device_type": "Agent", "status": "Online", "ip_address": "192.168.1.2"},
         "00:11:22:33:44:56": {"device_name": "Device2", "device_type": "Agent", "status": "Offline", "ip_address": "192.168.1.3"}
     }
@@ -25,7 +25,7 @@ def find_discoverable_bluetooth_devices():
 @app.route('/api/invite_to_network', methods=['POST'])
 def invite_to_network():
     data = request.json
-    print(f"Inviting devices: {data}")
+    print(f"Inviting devices: {data}") # Log received data
     return jsonify({"success": True})
 
 @app.route('/api/enumerate_wifi_devices', methods=['GET'])

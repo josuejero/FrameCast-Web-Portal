@@ -12,6 +12,13 @@ function findNewDevices(){
 }
 
 function inviteToNetwork(){
+  let discoveredDevices = document.getElementById('discovered-devices').innerHTML
+
+  if (discoveredDevices.trim() === ""){
+    alert("No devices found to invite. Please click 'FIND NEW DEVICES' first.")
+    return;
+  }
+
   let selectedDevices = {}
   fetch('/api/invite_to_network', {
     method: 'POST',
