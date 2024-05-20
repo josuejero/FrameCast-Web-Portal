@@ -36,5 +36,27 @@ def enumerate_wifi_devices():
     }
     return jsonify(networked_devices)
 
+@app.route('/api/get_all_photos', methods=['GET'])
+def get_all_photos():
+    photos = {
+        "photo1": {"photo_name": "Photo1", "path": "path/to/photo1.jpg"},
+        "photo2": {"photo_name": "Photo2", "path": "path/to/photo2.jpg"}
+    }
+    return jsonify(photos)
+
+@app.route('/api/get_all_devices', methods=['GET'])
+def get_all_devices():
+    devices = {
+        "device1": {"device_name": "Device1", "device_type": "Agent", "status": "Online"},
+        "device2": {"device_name": "Device2", "device_type": "Principal", "status": "Offline"}
+    }
+    return jsonify(devices)
+
+@app.route('/api/save_device_config', methods=['POST'])
+def save_device_config():
+    data = request.json
+    print(f"Saving device config: {data}")
+    return jsonify({"success": True})
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
