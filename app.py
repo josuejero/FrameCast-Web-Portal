@@ -52,6 +52,22 @@ def get_all_devices():
     }
     return jsonify(devices)
 
+@app.route('/api/get_photo/<photo_id>', methods=['GET'])
+def get_photo(photo_id):
+    photo = {
+        "photo_id": photo_id,
+        "photo_name": f"Photo{photo_id[-1]}",
+        "rotation": 0,
+        "scaling": 100,
+        "window": (0, 0)
+    }
+    return jsonify(photo)
+
+def upload_photo():
+    data = request.json
+    print(f"Uploading photo: {data}")
+    return jsonify({"success": True})
+
 @app.route('/api/save_device_config', methods=['POST'])
 def save_device_config():
     data = request.json
