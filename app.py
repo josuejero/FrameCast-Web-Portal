@@ -1,6 +1,25 @@
 from flask import Flask, render_template, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Photo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    photo_name = db.Column(db.String(100), nullable=False)
+    path = db.Column(db.String(200), nullable=False)
+    rotation = db.Column(db.Integer, default=0)
+    scaling = db.Column(db.Integer, default=100)
+    window_x = db.Column(db.Integer, default=0)
+    window_y = db.Column(db.Integer, default=0)
+
+class Device(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    device_name = db.Column(db.String(100), nullable=False)
+    device_type = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
 
 @app.route('/')
 def index():
@@ -38,34 +57,38 @@ def enumerate_wifi_devices():
 
 @app.route('/api/get_all_photos', methods=['GET'])
 def get_all_photos():
-    photos = {
-        "photo1": {"photo_name": "Photo1", "path": "path/to/photo1.jpg"},
-        "photo2": {"photo_name": "Photo2", "path": "path/to/photo2.jpg"}
-    }
-    return jsonify(photos)
+    photos = Photo.query.all()
+    photos_dict = {photo.id: {"photo_name": photo.photo_name, "path": photo.path} for photo in photos}
+    return jsonify(photos_dict)
 
 @app.route('/api/get_all_devices', methods=['GET'])
 def get_all_devices():
-    devices = {
-        "device1": {"device_name": "Device1", "device_type": "Agent", "status": "Online"},
-        "device2": {"device_name": "Device2", "device_type": "Principal", "status": "Offline"}
-    }
-    return jsonify(devices)
+    devices = Device.query.all()
+    devices_dict = {device.id: {"device_name": device.device_name, "device_type": device.device_type, "status": device.status} for device in devices}
+    return jsonify(devices_dict)
 
 @app.route('/api/get_photo/<photo_id>', methods=['GET'])
 def get_photo(photo_id):
-    photo = {
-        "photo_id": photo_id,
-        "photo_name": f"Photo{photo_id[-1]}",
-        "rotation": 0,
-        "scaling": 100,
-        "window": (0, 0)
-    }
-    return jsonify(photo)
+    photo = Photo.query.get(photo_id)
+    if photo:
+        photo_data = {
+            "photo_id": photo.id,
+            "photo_name": photo.photo_name,
+            "rotation": photo.rotation,
+            "scaling": photo.scaling,
+            "window": (photo.window_x, photo.window_y)
+        }
+        return jsonify(photo_data)
+    else:
+        return jsonify({"error": "Photo not found"}), 404
 
+@app.route('/api/upload_photo', methods=['POST'])
 def upload_photo():
     data = request.json
     print(f"Uploading photo: {data}")
+    new_photo = Photo(photo_name=data['photo_name'], path=data['path'])
+    db.session.add(new_photo)
+    db.session.commit()
     return jsonify({"success": True})
 
 @app.route('/api/save_device_config', methods=['POST'])
@@ -75,4 +98,13 @@ def save_device_config():
     return jsonify({"success": True})
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Ensure tables are created
+        # Add initial data if needed
+        if not Photo.query.first():
+            photo1 = Photo(photo_name="Photo1", path="path/to/photo1.jpg")
+            photo2 = Photo(photo_name="Photo2", path="path/to/photo2.jpg")
+            db.session.add(photo1)
+            db.session.add(photo2)
+            db.session.commit()
     app.run(debug=True, host='0.0.0.0')
