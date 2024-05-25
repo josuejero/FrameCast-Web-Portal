@@ -1,3 +1,5 @@
+let discoveredDevices = {};
+
 document.addEventListener('DOMContentLoaded', () => {
     getAllPhotos();
     getAllDevices();
@@ -7,12 +9,13 @@ function findNewDevices() {
     fetch('/api/find_discoverable_bluetooth_devices')
     .then(response => response.json())
     .then(data => {
-        let discoveredDevices = document.getElementById('discovered-devices');
-        if (discoveredDevices) {
-            discoveredDevices.innerHTML = '';
+        discoveredDevices = data;  // Store discovered devices in the global variable
+        let discoveredDevicesElement = document.getElementById('discovered-devices');
+        if (discoveredDevicesElement) {
+            discoveredDevicesElement.innerHTML = '';
             for (let mac in data) {
                 let device = data[mac];
-                discoveredDevices.innerHTML += `<p>${device.device_name}</p>`;
+                discoveredDevicesElement.innerHTML += `<p>${device.device_name}</p>`;
             }
         } else {
             console.error('Element "discovered-devices" not found');
@@ -22,32 +25,27 @@ function findNewDevices() {
 }
 
 function inviteToNetwork() {
-    let discoveredDevices = document.getElementById('discovered-devices').innerHTML;
-    if (discoveredDevices.trim() === "") {
-        alert("No devices found to invite. Please click 'FIND NEW DEVICES' first.");
-        return;
-}
-
-let selectedDevices = {}; // Collect selected devices if necessary
-
-fetch('/api/invite_to_network', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(selectedDevices)
-})
+    fetch('/api/invite_to_network', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Object.keys(discoveredDevices))
+    })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            findWiFiDevices();
+            console.log("Devices successfully invited to network");
+            findWiFiDevices();  // Refresh the list of networked devices
+        } else {
+            console.log("Failed to invite devices");
         }
     })
-    .catch(error => console.error('Error inviting devices:', error));
+    .catch(error => console.error("Error inviting devices:", error));
 }
 
 function findWiFiDevices() {
-fetch('/api/enumerate_wifi_devices')
+    fetch('/api/enumerate_wifi_devices')
     .then(response => response.json())
     .then(data => {
         let networkedDevices = document.getElementById('networked-devices');
@@ -71,7 +69,7 @@ fetch('/api/enumerate_wifi_devices')
 }
 
 function getAllPhotos() {
-fetch('/api/get_all_photos')
+    fetch('/api/get_all_photos')
     .then(response => response.json())
     .then(data => {
         let photoList = document.getElementById('photo-list');

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
@@ -51,8 +52,10 @@ def invite_to_network():
     data = request.json
     print(f"Inviting devices: {data}")
 
-    for mac, device in discovered_devices.items():
-        if mac in data:
+    for mac in data:
+        device = discovered_devices.get(mac)
+        if device:
+            print(f"Adding device: {device}")
             new_device = Device(
                 device_name=device['device_name'],
                 device_type=device['device_type'],
@@ -123,10 +126,4 @@ def save_device_config():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        if not Device.query.first():
-            device1 = Device(device_name="Device1", device_type="Principal", status="Online", ip_address="192.168.1.1")
-            device2 = Device(device_name="Device2", device_type="Agent", status="Offline", ip_address="192.168.1.2")
-            db.session.add(device1)
-            db.session.add(device2)
-            db.session.commit()
     app.run(debug=True, host='0.0.0.0')
