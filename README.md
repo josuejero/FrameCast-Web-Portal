@@ -1,4 +1,4 @@
-# Digital Photo Frame Ecosystem Web Portal
+# FrameCast Web Portal
 
 ## Overview
 
@@ -14,6 +14,8 @@ The Digital Photo Frame Ecosystem project involves creating a browser-based web 
 
 - **Python**
 - **Flask**
+- **Flask-SQLAlchemy**
+- **Flask-Migrate**
 - **SQLite**
 - **HTML**
 - **CSS**
@@ -26,26 +28,40 @@ The Digital Photo Frame Ecosystem project involves creating a browser-based web 
 - Python 3.x
 - Flask
 - Flask-SQLAlchemy
+- Flask-Migrate
 
 ### Installation
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-repo/digital-photo-frame-ecosystem.git
+    git clone https://github.com/josuejero/FrameCast-Web-Portal.git
     cd digital-photo-frame-ecosystem
     ```
 
-2. Install dependencies:
+2. Set up a virtual environment and activate it:
     ```bash
-    pip install Flask Flask-SQLAlchemy
+    python3 -m venv venv
+    source venv/bin/activate
     ```
 
-3. Run the Flask application:
+3. Install dependencies:
+    ```bash
+    pip install Flask Flask-SQLAlchemy Flask-Migrate
+    ```
+
+4. Initialize and migrate the database:
+    ```bash
+    flask db init
+    flask db migrate -m "Initial migration with ip_address column"
+    flask db upgrade
+    ```
+
+5. Run the Flask application:
     ```bash
     sudo python3 app.py
     ```
 
-4. Open your browser and navigate to:
+6. Open your browser and navigate to:
     ```
     http://<your-raspberry-pi-ip>:5000
     ```
@@ -66,6 +82,8 @@ digital-photo-frame-ecosystem/
 │ ├── style_photo_editor.css # Photo Editor styles
 │ ├── device-editor-app.js # JavaScript for Device Editor
 │ ├── photo-editor-app.js # JavaScript for Photo Editor
+│
+├── migrations/ # Database migration scripts
 │
 └── README.md
 
@@ -95,7 +113,7 @@ digital-photo-frame-ecosystem/
 ### Device Manager
 
 1. **Find New Devices**: Click the "Find New Devices" button to discover Bluetooth devices.
-2. **Invite to Network**: Select devices from the discovered list and click "Invite to Network."
+2. **Invite to Network**: Click the "Invite to Network" button to add the selected devices to the network.
 
 ### Device Editor
 
@@ -121,4 +139,3 @@ This project is licensed under the MIT License. See the LICENSE file for details
 - SQLite
 - JavaScript
 
-This README file provides a comprehensive overview of the project, including installation instructions, project structure, API endpoints, usage instructions, and contribution guidelines. Adjust the repository URL and any other specifics as needed for your project.
