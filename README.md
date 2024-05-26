@@ -2,7 +2,7 @@
 
 ## Overview
 
-The FrameCast project involves creating a browser-based web portal for managing digital photo frames. The web portal runs on a Raspberry Pi 4 and allows users to configure devices, upload photos, and edit photo display settings.
+The FrameCast project involves creating a browser-based web portal for managing the FrameCast digital photo frames. The web portal runs on the principal device's Raspberry Pi 4 OS and allows users to configure devices, upload photos, and edit photo display settings.
 
 ## Features
 
@@ -69,7 +69,7 @@ The FrameCast project involves creating a browser-based web portal for managing 
 ## Project Structure
 
     
-    digital-photo-frame-ecosystem/
+    framecast-web-portal/
     │
     ├── app.py # Flask application
     ├── templates/
