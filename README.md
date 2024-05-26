@@ -68,7 +68,7 @@ The FrameCast project involves creating a browser-based web portal for managing 
 
 ## Project Structure
 
-    ```bash
+    ```
     digital-photo-frame-ecosystem/
     │
     ├── app.py # Flask application
