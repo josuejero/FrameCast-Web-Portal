@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Digital Photo Frame Ecosystem project involves creating a browser-based web portal for managing digital photo frames. The web portal runs on a Raspberry Pi 4 and allows users to configure devices, upload photos, and edit photo display settings.
+The FrameCast project involves creating a browser-based web portal for managing digital photo frames. The web portal runs on a Raspberry Pi 4 and allows users to configure devices, upload photos, and edit photo display settings.
 
 ## Features
 
@@ -35,7 +35,7 @@ The Digital Photo Frame Ecosystem project involves creating a browser-based web 
 1. Clone the repository:
     ```bash
     git clone https://github.com/josuejero/FrameCast-Web-Portal.git
-    cd digital-photo-frame-ecosystem
+    cd framecast-web-portal
     ```
 
 2. Set up a virtual environment and activate it:
@@ -68,25 +68,26 @@ The Digital Photo Frame Ecosystem project involves creating a browser-based web 
 
 ## Project Structure
 
-digital-photo-frame-ecosystem/
-│
-├── app.py # Flask application
-├── templates/
-│ ├── index.html # Device Manager page
-│ ├── device_editor.html # Device Editor page
-│ ├── photo_editor.html # Photo Editor page
-│
-├── static/
-│ ├── style.css # General styles
-│ ├── style_device_editor.css # Device Editor styles
-│ ├── style_photo_editor.css # Photo Editor styles
-│ ├── device-editor-app.js # JavaScript for Device Editor
-│ ├── photo-editor-app.js # JavaScript for Photo Editor
-│
-├── migrations/ # Database migration scripts
-│
-└── README.md
-
+    ```bash
+    digital-photo-frame-ecosystem/
+    │
+    ├── app.py # Flask application
+    ├── templates/
+    │ ├── index.html # Device Manager page
+    │ ├── device_editor.html # Device Editor page
+    │ ├── photo_editor.html # Photo Editor page
+    │
+    ├── static/
+    │ ├── style.css # General styles
+    │ ├── style_device_editor.css # Device Editor styles
+    │ ├── style_photo_editor.css # Photo Editor styles
+    │ ├── device-editor-app.js # JavaScript for Device Editor
+    │ ├── photo-editor-app.js # JavaScript for Photo Editor
+    │
+    ├── migrations/ # Database migration scripts
+    │
+    └── README.md
+    ```
 
 ## API Endpoints
 
