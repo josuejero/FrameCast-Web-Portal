@@ -26,8 +26,8 @@ body {
   font-weight: 800;
   cursor: pointer;
   transition: transform 0.3s ease, color 0.3s ease;
-  text-decoration: none;  /* Remove underline */
-  color: inherit;  /* Remove blue color */
+  text-decoration: none;
+  color: inherit;
 }
 
 .navbar-item:hover {
@@ -88,8 +88,7 @@ body {
   border-bottom: 1px solid #000;
 }
 
-.action-button,
-.invite-button {
+.action-button {
   padding: 10px 20px;
   margin: 10px;
   border: none;
@@ -99,52 +98,50 @@ body {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.action-button:hover,
-.invite-button:hover {
+.action-button:hover {
   background-color: #8c8c8c;
   transform: scale(1.05);
 }
 
 @media screen and (max-width: 768px) {
   .navbar {
-      flex-direction: row;
-      align-items: center;
+    flex-direction: row;
+    align-items: center;
   }
 
   .navbar-item {
-      font-size: 18px;
-      margin: 10px 0;
+    font-size: 18px;
+    margin: 10px 0;
   }
 
   .devices-section {
-      width: 100%;
-      padding: 10px;
+    width: 100%;
+    padding: 10px;
   }
 
   .section-title {
-      font-size: 20px;
+    font-size: 20px;
   }
 
   .device-item,
-  .action-button,
-  .invite-button {
-      font-size: 14px;
+  .action-button {
+    font-size: 14px;
   }
 
   .device-list-header {
-      flex-direction: row;
-      align-items: center;
+    flex-direction: row;
+    align-items: center;
   }
 }
 
 @media screen and (max-width: 600px) {
   .device-list-header {
-      display: row;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+    display: row;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 
   .device-list-header p {
-      font-size: 14px;
+    font-size: 14px;
   }
 }

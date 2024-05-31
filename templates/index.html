@@ -18,8 +18,8 @@
             <h2 class="section-title">DISCOVERED DEVICES</h2>
             <div id="discovered-devices" class="device-list"></div>
             <button class="action-button" onclick="findNewDevices()">FIND NEW DEVICES</button>
+            <button class="action-button" onclick="inviteToNetwork()">INVITE TO NETWORK</button>
         </section>
-        <button class="action-button invite-button" onclick="inviteToNetwork()">INVITE TO NETWORK</button>
         <section class="devices-section">
             <h2 class="section-title">NETWORKED DEVICES</h2>
             <div class="device-list-header">
@@ -29,15 +29,6 @@
                 <p>IP Address</p>
             </div>
             <div id="networked-devices" class="device-list"></div>
-        </section>
-        <section class="photo-section">
-            <h2 class="section-title">PHOTOS</h2>
-            <div id="photo-list" class="photo-list"></div>
-            <button class="action-button" onclick="uploadNewPhoto()">UPLOAD NEW PHOTO</button>
-        </section>
-        <section class="device-section">
-            <h2 class="section-title">DEVICE LIST</h2>
-            <div id="device-list" class="device-list"></div>
         </section>
     </main>
     <script src="{{ url_for('static', filename='app.js') }}"></script>
