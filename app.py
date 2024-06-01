@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
@@ -24,6 +23,13 @@ class Device(db.Model):
     device_type = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(50), nullable=False)
     ip_address = db.Column(db.String(50), nullable=False)
+    photo_update_frequency = db.Column(db.Integer, default=0)
+    random_order = db.Column(db.Boolean, default=False)
+
+class PhotoDevice(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'), nullable=False)
+    device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=False)
 
 @app.route('/')
 def index():
@@ -121,6 +127,37 @@ def upload_photo():
 def save_device_config():
     data = request.json
     print(f"Saving device config: {data}")
+    device = Device.query.filter_by(device_name=data['device_name']).first()
+    if device:
+        device.photo_update_frequency = data['photo_update_frequency']
+        device.random_order = data['random_order']
+        db.session.commit()
+        return jsonify({"success": True})
+    else:
+        return jsonify({"error": "Device not found"}), 404
+
+@app.route('/api/add_photos_to_devices', methods=['POST'])
+def add_photos_to_devices():
+    data = request.json
+    print(f"Adding photos to devices: {data}")
+    photo_ids = data.get('photo_ids', [])
+    device_ids = data.get('device_ids', [])
+    for photo_id in photo_ids:
+        for device_id in device_ids:
+            new_photo_device = PhotoDevice(photo_id=photo_id, device_id=device_id)
+            db.session.add(new_photo_device)
+    db.session.commit()
+    return jsonify({"success": True})
+
+@app.route('/api/move_photo/<photo_id>', methods=['POST'])
+def move_photo(photo_id):
+    direction = request.json.get('direction')
+    print(f"Moving photo {photo_id} {direction}")
+    return jsonify({"success": True})
+
+@app.route('/api/remove_photo/<photo_id>', methods=['DELETE'])
+def remove_photo(photo_id):
+    print(f"Removing photo {photo_id}")
     return jsonify({"success": True})
 
 if __name__ == '__main__':
