@@ -1,6 +1,9 @@
 from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import socket
+import subprocess
+import netifaces as ni
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
@@ -30,6 +33,25 @@ class PhotoDevice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'), nullable=False)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=False)
+
+def get_ip_address():
+    hostname = socket.gethostname()
+    fqdn = socket.getfqdn()
+
+    # Get the local IP address using netifaces
+    try:
+        interfaces = ni.interfaces()
+        for interface in interfaces:
+            if ni.AF_INET in ni.ifaddresses(interface):
+                ip_address = ni.ifaddresses(interface)[ni.AF_INET][0]['addr']
+                # Exclude loopback address
+                if ip_address != '127.0.0.1':
+                    break
+    except Exception as e:
+        print(f"Error getting IP address: {e}")
+        ip_address = None
+
+    return ip_address, fqdn
 
 @app.route('/')
 def index():
@@ -159,6 +181,11 @@ def move_photo(photo_id):
 def remove_photo(photo_id):
     print(f"Removing photo {photo_id}")
     return jsonify({"success": True})
+
+@app.route('/api/get_ip_address', methods=['GET'])
+def get_ip():
+    ip_address, fqdn = get_ip_address()
+    return jsonify({'ip_address': ip_address, 'fqdn': fqdn})
 
 if __name__ == '__main__':
     with app.app_context():
