@@ -2,7 +2,6 @@ from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import socket
-import subprocess
 import netifaces as ni
 
 app = Flask(__name__)
@@ -41,7 +40,7 @@ def get_simulated_photo_config():
         "photo_name": "Simulated Photo",
         "rotation": 0,
         "scaling": 100,
-        "window": (0, 0)
+        "window": {"x": 0, "y": 0}
     }
     return jsonify(simulated_response)
 
@@ -53,18 +52,15 @@ def get_simulated_photos():
     }
     return jsonify(simulated_photos)
 
-# Function to get IP address
 def get_ip_address():
     hostname = socket.gethostname()
     fqdn = socket.getfqdn()
 
-    # Get the local IP address using netifaces
     try:
         interfaces = ni.interfaces()
         for interface in interfaces:
             if ni.AF_INET in ni.ifaddresses(interface):
                 ip_address = ni.ifaddresses(interface)[ni.AF_INET][0]['addr']
-                # Exclude loopback address
                 if ip_address != '127.0.0.1':
                     break
     except Exception as e:
@@ -150,7 +146,7 @@ def get_photo(photo_id):
             "photo_name": photo.photo_name,
             "rotation": photo.rotation,
             "scaling": photo.scaling,
-            "window": (photo.window_x, photo.window_y)
+            "window": {"x": photo.window_x, "y": photo.window_y}
         }
         return jsonify(photo_data)
     else:
@@ -163,7 +159,10 @@ def upload_photo():
     new_photo = Photo(photo_name=data['photo_name'], path=data['path'])
     db.session.add(new_photo)
     db.session.commit()
+    print(f"Photo uploaded: {new_photo.id}")
     return jsonify({"success": True})
+
+
 
 @app.route('/api/save_device_config', methods=['POST'])
 def save_device_config():
@@ -209,14 +208,26 @@ def get_ip():
 
 def map_url_to_ip(ip_address):
     url = f"http://{ip_address}:5000"
-    # You can update the system's hosts file or use a DNS server to map the URL to this IP
-    # For example, updating /etc/hosts (Linux/Mac):
     try:
         with open('/etc/hosts', 'a') as f:
             f.write(f"{ip_address}\tframecast.local\n")
         print(f"Mapped {url} to framecast.local")
     except Exception as e:
         print(f"Error mapping URL to IP: {e}")
+        
+@app.route('/reset', methods=['GET'])
+def reset_state():
+    # Clear all photos
+    db.session.query(Photo).delete()
+    # Add initial photos
+    initial_photos = [
+        Photo(photo_name='Photo1', path='path/to/photo1.jpg'),
+        Photo(photo_name='Photo2', path='path/to/photo2.jpg')
+    ]
+    db.session.bulk_save_objects(initial_photos)
+    db.session.commit()
+    return jsonify({"success": True})
+
         
 @app.route('/api/map_url', methods=['GET'])
 def map_url():

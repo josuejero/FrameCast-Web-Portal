@@ -1,3 +1,4 @@
+# test_device_model.py
 import unittest
 from app import app, db, Device
 from test_config import TestConfig
@@ -16,7 +17,7 @@ class DeviceModelTestCase(unittest.TestCase):
 
     def test_create_device(self):
         with app.app_context():
-            new_device = Device(device_name="Test Device", device_type="Agent", status="Online")
+            new_device = Device(device_name="Test Device", device_type="Agent", status="Online", ip_address="192.168.1.1")
             db.session.add(new_device)
             db.session.commit()
             self.assertIsNotNone(new_device.id)
@@ -25,7 +26,7 @@ class DeviceModelTestCase(unittest.TestCase):
 
     def test_read_device(self):
         with app.app_context():
-            new_device = Device(device_name="Test Device", device_type="Agent", status="Online")
+            new_device = Device(device_name="Test Device", device_type="Agent", status="Online", ip_address="192.168.1.1")
             db.session.add(new_device)
             db.session.commit()
             device = Device.query.filter_by(device_name="Test Device").first()
@@ -35,7 +36,7 @@ class DeviceModelTestCase(unittest.TestCase):
 
     def test_update_device(self):
         with app.app_context():
-            new_device = Device(device_name="Test Device", device_type="Agent", status="Online")
+            new_device = Device(device_name="Test Device", device_type="Agent", status="Online", ip_address="192.168.1.1")
             db.session.add(new_device)
             db.session.commit()
             device = Device.query.filter_by(device_name="Test Device").first()
@@ -48,7 +49,7 @@ class DeviceModelTestCase(unittest.TestCase):
 
     def test_delete_device(self):
         with app.app_context():
-            new_device = Device(device_name="Test Device", device_type="Agent", status="Online")
+            new_device = Device(device_name="Test Device", device_type="Agent", status="Online", ip_address="192.168.1.1")
             db.session.add(new_device)
             db.session.commit()
             device = Device.query.filter_by(device_name="Test Device").first()
