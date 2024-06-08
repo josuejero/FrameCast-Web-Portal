@@ -68,7 +68,7 @@ The FrameCast project involves creating a browser-based web portal for managing 
 
 ## Project Structure
 
-    ```bash
+    ```
     framecast-web-portal/
     │
     ├── app.py # Flask application
