@@ -33,7 +33,27 @@ class PhotoDevice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'), nullable=False)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=False)
+    
+@app.route('/api/simulated_photo_config', methods=['GET'])
+def get_simulated_photo_config():
+    simulated_response = {
+        "photo_id": 1,
+        "photo_name": "Simulated Photo",
+        "rotation": 0,
+        "scaling": 100,
+        "window": (0, 0)
+    }
+    return jsonify(simulated_response)
 
+@app.route('/api/simulated_photos', methods=['GET'])
+def get_simulated_photos():
+    simulated_photos = {
+        1: {"photo_name": "Photo1", "path": "path/to/photo1.jpg"},
+        2: {"photo_name": "Photo2", "path": "path/to/photo2.jpg"}
+    }
+    return jsonify(simulated_photos)
+
+# Function to get IP address
 def get_ip_address():
     hostname = socket.gethostname()
     fqdn = socket.getfqdn()
@@ -186,6 +206,23 @@ def remove_photo(photo_id):
 def get_ip():
     ip_address, fqdn = get_ip_address()
     return jsonify({'ip_address': ip_address, 'fqdn': fqdn})
+
+def map_url_to_ip(ip_address):
+    url = f"http://{ip_address}:5000"
+    # You can update the system's hosts file or use a DNS server to map the URL to this IP
+    # For example, updating /etc/hosts (Linux/Mac):
+    try:
+        with open('/etc/hosts', 'a') as f:
+            f.write(f"{ip_address}\tframecast.local\n")
+        print(f"Mapped {url} to framecast.local")
+    except Exception as e:
+        print(f"Error mapping URL to IP: {e}")
+        
+@app.route('/api/map_url', methods=['GET'])
+def map_url():
+    ip_address, _ = get_ip_address()
+    map_url_to_ip(ip_address)
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     with app.app_context():

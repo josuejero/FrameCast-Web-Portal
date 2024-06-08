@@ -88,6 +88,35 @@ console.log("Document loaded, fetching initial data...");
 getAllPhotos();
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/simulated_photos')
+        .then(response => response.json())
+        .then(data => {
+            let photoList = document.querySelector('.photo-list');
+            photoList.innerHTML = '';
+            for (let id in data) {
+                let photo = data[id];
+                photoList.innerHTML += `<label><input type="radio" name="photo" value="${id}"> ${photo.photo_name}</label>`;
+            }
+        })
+        .catch(error => console.error('Error fetching photos:', error));
+
+    document.querySelector('.photo-list').addEventListener('change', (event) => {
+        if (event.target.name === 'photo') {
+            fetch('/api/simulated_photo_config')
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('.preview-image').src = data.path;
+                    document.querySelector('.rotate-ccw').dataset.photoId = data.photo_id;
+                    document.querySelector('.rotate-cw').dataset.photoId = data.photo_id;
+                    document.querySelector('.scale').dataset.photoId = data.photo_id;
+                    document.querySelector('.save').dataset.photoId = data.photo_id;
+                })
+                .catch(error => console.error('Error fetching photo config:', error));
+        }
+    });
+});
+
 document.querySelector('.upload-button').addEventListener('click', uploadPhoto);
 
 document.querySelector('.photo-list').addEventListener('change', (event) => {

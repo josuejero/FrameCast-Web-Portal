@@ -46,7 +46,7 @@ The FrameCast project involves creating a browser-based web portal for managing 
 
 3. Install dependencies:
     ```bash
-    pip install Flask Flask-SQLAlchemy Flask-Migrate
+    pip install Flask Flask-SQLAlchemy Flask-Migrate netifaces
     ```
 
 4. Initialize and migrate the database:
@@ -63,19 +63,19 @@ The FrameCast project involves creating a browser-based web portal for managing 
 
 6. Open your browser and navigate to:
     ```
-    http://<your-raspberry-pi-ip>:5000
+    http://framecast.local:5000
     ```
 
 ## Project Structure
 
-    
+    ```graphql
     framecast-web-portal/
     │
     ├── app.py # Flask application
     ├── templates/
     │ ├── index.html # Device Manager page
     │ ├── device_editor.html # Device Editor page
-    │ ├── photo_editor.html # Photo Editor page
+    │ └── photo_editor.html # Photo Editor page
     │
     ├── static/
     │ ├── style.css # General styles
@@ -83,12 +83,29 @@ The FrameCast project involves creating a browser-based web portal for managing 
     │ ├── style_photo_editor.css # Photo Editor styles
     │ ├── device-editor-app.js # JavaScript for Device Editor
     │ ├── photo-editor-app.js # JavaScript for Photo Editor
+    │ └── app.js # General JavaScript
     │
     ├── migrations/ # Database migration scripts
+    │ ├── alembic.ini
+    │ ├── env.py
+    │ ├── README
+    │ ├── script.py.mako
+    │ └── versions/
+    │ ├── <migration_script>.py
+    │ └── ...
     │
-    └── README.md
+    ├── instance/
+    │ └── photos.db
+    │
+    ├── LICENSE
+    ├── README.md
+    └── tests/
+    ├── test_app.py
+    ├── test_config.py
+    ├── test_db.py
+    └── test_device_model.py
+    ```
     
-
 ## API Endpoints
 
 ### Device Manager
@@ -101,6 +118,9 @@ The FrameCast project involves creating a browser-based web portal for managing 
 
 - **GET /api/get_all_devices**: Retrieves all devices in the ecosystem.
 - **POST /api/save_device_config**: Saves the configuration of a device.
+- **POST /api/add_photos_to_devices**: Adds photos to devices.
+- **POST /api/move_photo/<photo_id>**: Moves the photo within the device's list.
+- **DELETE /api/remove_photo/<photo_id>**: Removes the photo from the device.
 
 ### Photo Editor
 
@@ -139,4 +159,3 @@ This project is licensed under the MIT License. See the LICENSE file for details
 - Flask
 - SQLite
 - JavaScript
-
