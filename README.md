@@ -68,7 +68,6 @@ The FrameCast project involves creating a browser-based web portal for managing 
 
 ## Project Structure
 
-    ```
     framecast-web-portal/
     │
     ├── app.py # Flask application
@@ -104,7 +103,6 @@ The FrameCast project involves creating a browser-based web portal for managing 
     ├── test_config.py
     ├── test_db.py
     └── test_device_model.py
-    ```
 
 ## API Endpoints
 
