@@ -1,3 +1,6 @@
+/**
+ * Fetch all photos from the server and update the photo list in the UI
+ */
 function getAllPhotos() {
     console.log("Fetching all photos...");
     fetch('/api/get_all_photos')
@@ -6,6 +9,7 @@ function getAllPhotos() {
             console.log("Photos fetched:", data);
             let photoList = document.querySelector('.photo-list');
             photoList.innerHTML = '';
+            // Populate the photo list element with fetched photos
             for (let id in data) {
                 let photo = data[id];
                 photoList.innerHTML += `<label><input type="radio" name="photo" value="${id}"> ${photo.photo_name}</label>`;
@@ -14,6 +18,10 @@ function getAllPhotos() {
         .catch(error => console.error('Error fetching photos:', error));
 }
 
+/**
+ * Fetch the configuration for a specific photo and update the UI with the photo details
+ * @param {string} photo_id - The ID of the photo to fetch
+ */
 function getPhotoConfig(photo_id) {
     console.log(`Fetching photo config for ${photo_id}...`);
     fetch(`/api/get_photo/${photo_id}`)
@@ -29,6 +37,9 @@ function getPhotoConfig(photo_id) {
         .catch(error => console.error('Error fetching photo config:', error));
 }
 
+/**
+ * Simulate uploading a new photo to the server
+ */
 function uploadPhoto() {
     console.log("Uploading new photo...");
     // Simulate photo upload
@@ -53,6 +64,10 @@ function uploadPhoto() {
     .catch(error => console.error('Error uploading photo:', error));
 }
 
+/**
+ * Save the photo configuration to the server
+ * @param {string} photo_id - The ID of the photo to save
+ */
 function savePhotoConfig(photo_id) {
     let rotation = document.querySelector('.rotate-ccw').dataset.rotation || 0;
     let scaling = document.querySelector('.scale-input').value;
@@ -83,12 +98,16 @@ function savePhotoConfig(photo_id) {
         .catch(error => console.error('Error saving photo configuration:', error));
 }
 
+// Event listener for when the document content is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Document loaded, fetching initial data...");
     getAllPhotos();
 });
 
+// Event listener for the upload button
 document.querySelector('.upload-button').addEventListener('click', uploadPhoto);
+
+// Event listener for the save button
 document.querySelector('.save').addEventListener('click', (event) => {
     savePhotoConfig(event.target.dataset.photoId);
 });

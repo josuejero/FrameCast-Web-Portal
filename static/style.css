@@ -1,3 +1,4 @@
+/* General Styles */
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
@@ -8,6 +9,7 @@ body {
   flex-direction: column;
 }
 
+/* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-around;
@@ -41,6 +43,7 @@ body {
   border-radius: 5px;
 }
 
+/* Main Content Styles */
 .main-content {
   display: flex;
   flex-direction: column;
@@ -103,6 +106,7 @@ body {
   transform: scale(1.05);
 }
 
+/* Responsive Styles for Screens with max-width 768px */
 @media screen and (max-width: 768px) {
   .navbar {
     flex-direction: row;
@@ -134,9 +138,10 @@ body {
   }
 }
 
+/* Responsive Styles for Screens with max-width 600px */
 @media screen and (max-width: 600px) {
   .device-list-header {
-    display: row;
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }

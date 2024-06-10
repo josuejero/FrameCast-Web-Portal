@@ -2,20 +2,31 @@
 <html lang="en">
 
 <head>
+    <!-- Meta tags for character encoding and viewport configuration -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Link to Google Fonts for 'Inter' font family -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap">
+    
+    <!-- Link to external CSS file for styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_photo_editor.css') }}">
+    
+    <!-- Page title -->
     <title>Photo Editor</title>
 </head>
 
 <body>
+    <!-- Navbar section for navigation -->
     <header class="navbar">
         <a href="/" class="navbar-item">DEVICE MANAGER</a>
         <a href="/device-editor" class="navbar-item">DEVICE EDITOR</a>
         <a href="/photo-editor" class="navbar-item highlight">PHOTO EDITOR</a>
     </header>
+
+    <!-- Main content area -->
     <main class="main-content">
+        <!-- Photo list section -->
         <section class="photo-list-section">
             <h2 class="section-title">PHOTOS</h2>
             <div class="photo-list">
@@ -34,6 +45,8 @@
             </div>
             <button class="action-button upload-button">UPLOAD NEW PHOTOS</button>
         </section>
+        
+        <!-- Photo display section -->
         <section class="photo-display-panel">
             <div class="photo-controls">
                 <button class="action-button rotate-ccw">ROTATE CCW</button>
@@ -50,6 +63,8 @@
             </div>
         </section>
     </main>
+
+    <!-- Link to external JavaScript file for interactivity -->
     <script src="{{ url_for('static', filename='photo-editor-app.js') }}"></script>
 </body>
 

@@ -4,12 +4,18 @@ from flask_migrate import Migrate
 import socket
 import netifaces as ni
 
+# Initialize the Flask application
 app = Flask(__name__)
+
+# Configure the database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize the database and migration objects
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# Define the Photo model
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo_name = db.Column(db.String(100), nullable=False)
@@ -19,6 +25,7 @@ class Photo(db.Model):
     window_x = db.Column(db.Integer, default=0)
     window_y = db.Column(db.Integer, default=0)
 
+# Define the Device model
 class Device(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     device_name = db.Column(db.String(100), nullable=False)
@@ -28,11 +35,13 @@ class Device(db.Model):
     photo_update_frequency = db.Column(db.Integer, default=0)
     random_order = db.Column(db.Boolean, default=False)
 
+# Define the PhotoDevice model
 class PhotoDevice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'), nullable=False)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=False)
-    
+
+# API endpoint to get simulated photo config
 @app.route('/api/simulated_photo_config', methods=['GET'])
 def get_simulated_photo_config():
     simulated_response = {
@@ -44,6 +53,7 @@ def get_simulated_photo_config():
     }
     return jsonify(simulated_response)
 
+# API endpoint to get simulated photos
 @app.route('/api/simulated_photos', methods=['GET'])
 def get_simulated_photos():
     simulated_photos = {
@@ -52,6 +62,7 @@ def get_simulated_photos():
     }
     return jsonify(simulated_photos)
 
+# Function to get IP address
 def get_ip_address():
     hostname = socket.gethostname()
     fqdn = socket.getfqdn()
@@ -69,18 +80,22 @@ def get_ip_address():
 
     return ip_address, fqdn
 
+# Route to render the main page
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# Route to render the device editor page
 @app.route('/device-editor')
 def device_editor():
     return render_template('device_editor.html')
 
+# Route to render the photo editor page
 @app.route('/photo-editor')
 def photo_editor():
     return render_template('photo_editor.html')
 
+# API endpoint to find discoverable Bluetooth devices
 @app.route('/api/find_discoverable_bluetooth_devices', methods=['GET'])
 def find_discoverable_bluetooth_devices():
     global discovered_devices
@@ -90,6 +105,7 @@ def find_discoverable_bluetooth_devices():
     }
     return jsonify(discovered_devices)
 
+# API endpoint to invite devices to the network
 @app.route('/api/invite_to_network', methods=['POST'])
 def invite_to_network():
     global discovered_devices
@@ -111,6 +127,7 @@ def invite_to_network():
     db.session.commit()
     return jsonify({"success": True})
 
+# API endpoint to enumerate WiFi devices
 @app.route('/api/enumerate_wifi_devices', methods=['GET'])
 def enumerate_wifi_devices():
     devices = Device.query.all()
@@ -125,18 +142,21 @@ def enumerate_wifi_devices():
     }
     return jsonify(devices_dict)
 
+# API endpoint to get all photos
 @app.route('/api/get_all_photos', methods=['GET'])
 def get_all_photos():
     photos = Photo.query.all()
     photos_dict = {photo.id: {"photo_name": photo.photo_name, "path": photo.path} for photo in photos}
     return jsonify(photos_dict)
 
+# API endpoint to get all devices
 @app.route('/api/get_all_devices', methods=['GET'])
 def get_all_devices():
     devices = Device.query.all()
     devices_dict = {device.id: {"device_name": device.device_name, "device_type": device.device_type, "status": device.status} for device in devices}
     return jsonify(devices_dict)
 
+# API endpoint to get a specific photo
 @app.route('/api/get_photo/<photo_id>', methods=['GET'])
 def get_photo(photo_id):
     photo = Photo.query.get(photo_id)
@@ -152,6 +172,7 @@ def get_photo(photo_id):
     else:
         return jsonify({"error": "Photo not found"}), 404
 
+# API endpoint to upload a photo
 @app.route('/api/upload_photo', methods=['POST'])
 def upload_photo():
     data = request.json
@@ -162,8 +183,7 @@ def upload_photo():
     print(f"Photo uploaded: {new_photo.id}")
     return jsonify({"success": True})
 
-
-
+# API endpoint to save device configuration
 @app.route('/api/save_device_config', methods=['POST'])
 def save_device_config():
     data = request.json
@@ -177,6 +197,7 @@ def save_device_config():
     else:
         return jsonify({"error": "Device not found"}), 404
 
+# API endpoint to add photos to devices
 @app.route('/api/add_photos_to_devices', methods=['POST'])
 def add_photos_to_devices():
     data = request.json
@@ -190,22 +211,26 @@ def add_photos_to_devices():
     db.session.commit()
     return jsonify({"success": True})
 
+# API endpoint to move a photo
 @app.route('/api/move_photo/<photo_id>', methods=['POST'])
 def move_photo(photo_id):
     direction = request.json.get('direction')
     print(f"Moving photo {photo_id} {direction}")
     return jsonify({"success": True})
 
+# API endpoint to remove a photo
 @app.route('/api/remove_photo/<photo_id>', methods=['DELETE'])
 def remove_photo(photo_id):
     print(f"Removing photo {photo_id}")
     return jsonify({"success": True})
 
+# API endpoint to get the IP address
 @app.route('/api/get_ip_address', methods=['GET'])
 def get_ip():
     ip_address, fqdn = get_ip_address()
     return jsonify({'ip_address': ip_address, 'fqdn': fqdn})
 
+# Function to map URL to IP
 def map_url_to_ip(ip_address):
     url = f"http://{ip_address}:5000"
     try:
@@ -214,7 +239,8 @@ def map_url_to_ip(ip_address):
         print(f"Mapped {url} to framecast.local")
     except Exception as e:
         print(f"Error mapping URL to IP: {e}")
-        
+
+# Route to reset the state (useful for tests)
 @app.route('/reset', methods=['GET'])
 def reset_state():
     # Clear all photos
@@ -228,13 +254,14 @@ def reset_state():
     db.session.commit()
     return jsonify({"success": True})
 
-        
+# API endpoint to map URL
 @app.route('/api/map_url', methods=['GET'])
 def map_url():
     ip_address, _ = get_ip_address()
     map_url_to_ip(ip_address)
     return jsonify({'success': True})
 
+# Main function to run the application
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

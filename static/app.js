@@ -1,9 +1,14 @@
+// Object to store discovered Bluetooth devices
 let discoveredDevices = {};
 
+// Event listener for when the document content is loaded
 document.addEventListener('DOMContentLoaded', () => {
     findWiFiDevices();
 });
 
+/**
+ * Function to find new Bluetooth devices that are discoverable
+ */
 function findNewDevices() {
     fetch('/api/find_discoverable_bluetooth_devices')
         .then(response => response.json())
@@ -12,6 +17,7 @@ function findNewDevices() {
             let discoveredDevicesElement = document.getElementById('discovered-devices');
             if (discoveredDevicesElement) {
                 discoveredDevicesElement.innerHTML = '';
+                // Populate the discovered devices element with the names of found devices
                 for (let mac in data) {
                     let device = data[mac];
                     discoveredDevicesElement.innerHTML += `<p>${device.device_name}</p>`;
@@ -23,6 +29,9 @@ function findNewDevices() {
         .catch(error => console.error('Error finding new devices:', error));
 }
 
+/**
+ * Function to invite discovered Bluetooth devices to join the network
+ */
 function inviteToNetwork() {
     fetch('/api/invite_to_network', {
         method: 'POST',
@@ -43,6 +52,9 @@ function inviteToNetwork() {
         .catch(error => console.error("Error inviting devices:", error));
 }
 
+/**
+ * Function to find devices connected to the WiFi network
+ */
 function findWiFiDevices() {
     fetch('/api/enumerate_wifi_devices')
         .then(response => response.json())
@@ -50,6 +62,7 @@ function findWiFiDevices() {
             let networkedDevices = document.getElementById('networked-devices');
             if (networkedDevices) {
                 networkedDevices.innerHTML = '';
+                // Populate the networked devices element with the details of connected devices
                 for (let sn in data) {
                     let device = data[sn];
                     networkedDevices.innerHTML += `

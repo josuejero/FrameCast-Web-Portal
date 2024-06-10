@@ -214,10 +214,9 @@ body {
   }
 }
 
-
 @media screen and (max-width: 768px) {
   .navbar-item {
-      font-size: 18px;
-      margin: 10px 0;
+    font-size: 18px;
+    margin: 10px 0;
   }
 }

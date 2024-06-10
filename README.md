@@ -2,107 +2,104 @@
 
 ## Overview
 
-The FrameCast project involves creating a browser-based web portal for managing the FrameCast digital photo frames. The web portal runs on the principal device's Raspberry Pi 4 OS and allows users to configure devices, upload photos, and edit photo display settings.
+The Web Portal is part of the FrameCast ecosystem, designed to run on the Principal's Raspberry Pi 4. It provides functionalities similar to the Android mobile app, allowing users to manage and configure their digital photo frames via a web browser. This includes uploading photos, assigning them to devices, and editing device configurations.
 
 ## Features
 
-- **Device Manager**: Discover and manage digital photo frames over Bluetooth and WiFi.
-- **Device Editor**: Configure device settings and assign photos to devices.
-- **Photo Editor**: Edit photo display settings such as rotation, scaling, and windowing.
+- **Device Manager**: Discover and manage Bluetooth and WiFi connected devices.
+- **Device Editor**: Configure device settings, assign photos, and manage photo display settings.
+- **Photo Editor**: Edit photos by rotating, scaling, and setting the display window.
 
-## Technologies Used
+## Prerequisites
 
-- **Python**
-- **Flask**
-- **Flask-SQLAlchemy**
-- **Flask-Migrate**
-- **SQLite**
-- **HTML**
-- **CSS**
-- **JavaScript**
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.x
+- Raspberry Pi 4
+- Python 3.7 or higher
 - Flask
 - Flask-SQLAlchemy
 - Flask-Migrate
+- SQLite
+- Node.js and npm (for frontend tests)
+- Puppeteer and Jest (for frontend tests)
 
-### Installation
+## Installation
 
-1. Clone the repository:
+1. **Clone the repository**:
     ```bash
     git clone https://github.com/josuejero/FrameCast-Web-Portal.git
-    cd framecast-web-portal
+    cd FrameCast-Web-Portal
     ```
 
-2. Set up a virtual environment and activate it:
+2. **Set up the virtual environment**:
     ```bash
     python3 -m venv venv
     source venv/bin/activate
     ```
 
-3. Install dependencies:
+3. **Install the dependencies**:
     ```bash
-    pip install Flask Flask-SQLAlchemy Flask-Migrate netifaces
+    pip3 install Flask Flask-SQLAlchemy Flask-Migrate netifaces
     ```
 
-4. Initialize and migrate the database:
+4. **Set up the database**:
     ```bash
-    flask db init
-    flask db migrate -m "Initial migration with ip_address column"
     flask db upgrade
     ```
 
-5. Run the Flask application:
+5. **Run the application**:
     ```bash
-    sudo python3 app.py
+    flask run --host=0.0.0.0
     ```
 
-6. Open your browser and navigate to:
-    ```
-    http://framecast.local:5000
-    ```
+## Directory Structure
 
-## Project Structure
-
-    framecast-web-portal/
-    │
-    ├── app.py # Flask application
-    ├── templates/
-    │ ├── index.html # Device Manager page
-    │ ├── device_editor.html # Device Editor page
-    │ └── photo_editor.html # Photo Editor page
-    │
-    ├── static/
-    │ ├── style.css # General styles
-    │ ├── style_device_editor.css # Device Editor styles
-    │ ├── style_photo_editor.css # Photo Editor styles
-    │ ├── device-editor-app.js # JavaScript for Device Editor
-    │ ├── photo-editor-app.js # JavaScript for Photo Editor
-    │ └── app.js # General JavaScript
-    │
-    ├── migrations/ # Database migration scripts
+    ├── app.py
+    ├── concat_files.sh
+    ├── instance
+    │ └── photos.db
+    ├── jest.config.js
+    ├── jest.setup.js
+    ├── LICENSE
+    ├── migrations
     │ ├── alembic.ini
     │ ├── env.py
+    │ ├── pycache
+    │ │ └── env.cpython-39.pyc
     │ ├── README
     │ ├── script.py.mako
-    │ └── versions/
-    │ ├── <migration_script>.py
-    │ └── ...
-    │
-    ├── instance/
-    │ └── photos.db
-    │
-    ├── LICENSE
+    │ └── versions
+    │ ├── c7e6147d997f_add_photo_update_frequency_and_random_.py
+    │ └── pycache
+    │ ├── 59e4b90e1b69_initial_migration_with_ip_address_column.cpython-39.pyc
+    │ └── c7e6147d997f_add_photo_update_frequency_and_random_.cpython-39.pyc
+    ├── package.json
+    ├── package-lock.json
+    ├── photo_frame.db
+    ├── photos.db
+    ├── pycache
+    │ ├── app.cpython-37.pyc
+    │ ├── app.cpython-39.pyc
+    │ ├── test_app.cpython-39-pytest-8.2.1.pyc
+    │ ├── test_config.cpython-39-pytest-8.2.1.pyc
+    │ ├── test_db.cpython-39-pytest-8.2.1.pyc
+    │ └── test_device_model.cpython-39-pytest-8.2.1.pyc
     ├── README.md
-    └── tests/
+    ├── static
+    │ ├── app.js
+    │ ├── device-editor-app.js
+    │ ├── photo-editor-app.js
+    │ ├── style.css
+    │ ├── style_device_editor.css
+    │ └── style_photo_editor.css
+    ├── templates
+    │ ├── device_editor.html
+    │ ├── index.html
+    │ └── photo_editor.html
     ├── test_app.py
     ├── test_config.py
     ├── test_db.py
-    └── test_device_model.py
+    ├── test_device_model.py
+    └── tests
+    └── photo-editor-app.test.js
 
 ## API Endpoints
 
