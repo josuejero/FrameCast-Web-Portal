@@ -22,55 +22,92 @@ function getAllPhotos() {
         .catch(error => console.error('Error fetching photos:', error));
 }
 
-
 /**
  * Fetch the configuration for a specific photo and update the UI with the photo details
  * @param {string} photo_id - The ID of the photo to fetch
  */
-
 function getPhotoConfig(photo_id) {
     console.log(`Fetching photo config for ${photo_id}...`);
     fetch(`/api/get_photo/${photo_id}`)
         .then(response => response.json())
         .then(data => {
             console.log("Photo config fetched:", data);
-            document.querySelector('.preview-image').src = data.path;
+            const previewImage = document.querySelector('.preview-image');
+            previewImage.src = data.path;
+            previewImage.dataset.rotation = data.rotation;
+            previewImage.dataset.scaling = data.scaling;
+            document.querySelector('.scale-input').value = data.scaling;
             document.querySelector('.rotate-ccw').dataset.photoId = data.photo_id;
             document.querySelector('.rotate-cw').dataset.photoId = data.photo_id;
             document.querySelector('.scale').dataset.photoId = data.photo_id;
             document.querySelector('.save').dataset.photoId = data.photo_id;
+
+            // Update the rotation and scaling data attributes
+            updatePreviewImage(data.rotation, data.scaling);
         })
         .catch(error => console.error('Error fetching photo config:', error));
 }
+
 /**
- * Simulate uploading a new photo to the server
+ * Update the preview image with the specified rotation and scaling
+ * @param {number} rotation - The rotation angle of the photo
+ * @param {number} scaling - The scaling percentage of the photo
  */
-function uploadPhoto(event) {
-    event.preventDefault();
-    let formData = new FormData(document.getElementById('upload-form'));
-    console.log("Uploading new photo...");
-    fetch('/api/upload_photo', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Photo uploaded successfully');
-            getAllPhotos();
-        }
-    })
-    .catch(error => console.error('Error uploading photo:', error));
+function updatePreviewImage(rotation, scaling) {
+    const previewImage = document.querySelector('.preview-image');
+    previewImage.style.transform = `rotate(${rotation}deg) scale(${scaling / 100})`;
+}
+
+/**
+ * Rotate the photo counterclockwise by 90 degrees
+ */
+function rotatePhotoCCW() {
+    const photoId = this.dataset.photoId;
+    fetch(`/api/get_photo/${photoId}`)
+        .then(response => response.json())
+        .then(data => {
+            const newRotation = (data.rotation - 90 + 360) % 360; // Ensure rotation is always positive
+            savePhotoConfig(photoId, newRotation, data.scaling);
+        })
+        .catch(error => console.error('Error rotating photo CCW:', error));
+}
+
+/**
+ * Rotate the photo clockwise by 90 degrees
+ */
+function rotatePhotoCW() {
+    const photoId = this.dataset.photoId;
+    fetch(`/api/get_photo/${photoId}`)
+        .then(response => response.json())
+        .then(data => {
+            const newRotation = (data.rotation + 90) % 360;
+            savePhotoConfig(photoId, newRotation, data.scaling);
+        })
+        .catch(error => console.error('Error rotating photo CW:', error));
+}
+
+/**
+ * Scale the photo to the specified percentage
+ */
+function scalePhoto() {
+    const photoId = this.dataset.photoId;
+    const newScaling = document.querySelector('.scale-input').value;
+    fetch(`/api/get_photo/${photoId}`)
+        .then(response => response.json())
+        .then(data => {
+            savePhotoConfig(photoId, data.rotation, newScaling);
+        })
+        .catch(error => console.error('Error scaling photo:', error));
 }
 
 /**
  * Save the photo configuration to the server
  * @param {string} photo_id - The ID of the photo to save
+ * @param {number} rotation - The rotation angle of the photo
+ * @param {number} scaling - The scaling percentage of the photo
  */
-function savePhotoConfig(photo_id) {
-    let rotation = document.querySelector('.rotate-ccw').dataset.rotation || 0;
-    let scaling = document.querySelector('.scale-input').value;
-    let window = {x: 0, y: 0};
+function savePhotoConfig(photo_id, rotation, scaling) {
+    let window = { x: 0, y: 0 };
     let splitScreen = {
         x: document.querySelector('.split-screen-x').value,
         y: document.querySelector('.split-screen-y').value,
@@ -99,6 +136,7 @@ function savePhotoConfig(photo_id) {
         .then(data => {
             if (data.success) {
                 console.log('Photo configuration saved successfully');
+                getPhotoConfig(photo_id); // Refresh the photo config in the UI
             }
         })
         .catch(error => console.error('Error saving photo configuration:', error));
@@ -111,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById('upload-form').addEventListener('submit', uploadPhoto);
+document.querySelector('.rotate-ccw').addEventListener('click', rotatePhotoCCW);
+document.querySelector('.rotate-cw').addEventListener('click', rotatePhotoCW);
+document.querySelector('.scale').addEventListener('click', scalePhoto);
 document.querySelector('.save').addEventListener('click', (event) => {
     savePhotoConfig(event.target.dataset.photoId);
 });

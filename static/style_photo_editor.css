@@ -110,30 +110,25 @@ body {
   border: 1px solid #000;
 }
 
+/* Ensure the photo container maintains its aspect ratio */
 .photo-container {
   position: relative;
-  width: 80%;
-  height: 0;
-  padding-bottom: 45%;
+  width: 100%;  /* Adjust the width as needed */
+  height: 100%; /* Ensure the container takes the full height available */
   border: 2px solid #000;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .preview-image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;  /* Ensures the image does not exceed the container's width */
+  max-height: 100%; /* Ensures the image does not exceed the container's height */
+  object-fit: contain;  /* Keeps the aspect ratio of the image */
 }
 
-.window-box {
-  position: absolute;
-  border: 2px solid red;
-  width: 50%;
-  height: 50%;
-  top: 25%;
-  left: 25%;
-}
+
 
 /* Responsive Styles */
 @media screen and (max-width: 1200px) {
