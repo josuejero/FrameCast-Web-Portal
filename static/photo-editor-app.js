@@ -9,19 +9,25 @@ function getAllPhotos() {
             console.log("Photos fetched:", data);
             let photoList = document.querySelector('.photo-list');
             photoList.innerHTML = '';
-            // Populate the photo list element with fetched photos
             for (let id in data) {
                 let photo = data[id];
-                photoList.innerHTML += `<label><input type="radio" name="photo" value="${id}"> ${photo.photo_name}</label>`;
+                const label = document.createElement('label');
+                label.innerHTML = `<input type="radio" name="photo" value="${id}"> ${photo.photo_name}`;
+                label.querySelector('input').addEventListener('change', () => {
+                    getPhotoConfig(id);
+                });
+                photoList.appendChild(label);
             }
         })
         .catch(error => console.error('Error fetching photos:', error));
 }
 
+
 /**
  * Fetch the configuration for a specific photo and update the UI with the photo details
  * @param {string} photo_id - The ID of the photo to fetch
  */
+
 function getPhotoConfig(photo_id) {
     console.log(`Fetching photo config for ${photo_id}...`);
     fetch(`/api/get_photo/${photo_id}`)
@@ -36,29 +42,22 @@ function getPhotoConfig(photo_id) {
         })
         .catch(error => console.error('Error fetching photo config:', error));
 }
-
 /**
  * Simulate uploading a new photo to the server
  */
-function uploadPhoto() {
+function uploadPhoto(event) {
+    event.preventDefault();
+    let formData = new FormData(document.getElementById('upload-form'));
     console.log("Uploading new photo...");
-    // Simulate photo upload
-    let newPhoto = {
-        photo_name: "New Photo",
-        path: "path/to/new_photo.jpg"
-    };
     fetch('/api/upload_photo', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newPhoto)
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             console.log('Photo uploaded successfully');
-            getAllPhotos(); // Refresh photo list
+            getAllPhotos();
         }
     })
     .catch(error => console.error('Error uploading photo:', error));
@@ -71,13 +70,20 @@ function uploadPhoto() {
 function savePhotoConfig(photo_id) {
     let rotation = document.querySelector('.rotate-ccw').dataset.rotation || 0;
     let scaling = document.querySelector('.scale-input').value;
-    let window = {x: 0, y: 0}; // Simulate window position
+    let window = {x: 0, y: 0};
+    let splitScreen = {
+        x: document.querySelector('.split-screen-x').value,
+        y: document.querySelector('.split-screen-y').value,
+        width: document.querySelector('.split-screen-width').value,
+        height: document.querySelector('.split-screen-height').value
+    };
 
     let photoConfig = {
         photo_id: photo_id,
         rotation: rotation,
         scaling: scaling,
-        window: window
+        window: window,
+        split_screen: splitScreen
     };
 
     console.log("Saving photo config:", photoConfig);
@@ -104,10 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     getAllPhotos();
 });
 
-// Event listener for the upload button
-document.querySelector('.upload-button').addEventListener('click', uploadPhoto);
-
-// Event listener for the save button
+document.getElementById('upload-form').addEventListener('submit', uploadPhoto);
 document.querySelector('.save').addEventListener('click', (event) => {
     savePhotoConfig(event.target.dataset.photoId);
 });

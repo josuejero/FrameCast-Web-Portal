@@ -1,17 +1,24 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from werkzeug.utils import secure_filename
+import os
 import socket
 import netifaces as ni
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
-# Initialize the Flask application
-app = Flask(__name__)
+# Initialize the Flask app
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 
-# Configure the database
+# Configuration for file uploads
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///photos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize the database and migration objects
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -24,6 +31,10 @@ class Photo(db.Model):
     scaling = db.Column(db.Integer, default=100)
     window_x = db.Column(db.Integer, default=0)
     window_y = db.Column(db.Integer, default=0)
+    split_screen_x = db.Column(db.Integer, default=0)
+    split_screen_y = db.Column(db.Integer, default=0)
+    split_screen_width = db.Column(db.Integer, default=100)
+    split_screen_height = db.Column(db.Integer, default=100)
 
 # Define the Device model
 class Device(db.Model):
@@ -79,6 +90,9 @@ def get_ip_address():
         ip_address = None
 
     return ip_address, fqdn
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Route to render the main page
 @app.route('/')
@@ -156,7 +170,6 @@ def get_all_devices():
     devices_dict = {device.id: {"device_name": device.device_name, "device_type": device.device_type, "status": device.status} for device in devices}
     return jsonify(devices_dict)
 
-# API endpoint to get a specific photo
 @app.route('/api/get_photo/<photo_id>', methods=['GET'])
 def get_photo(photo_id):
     photo = Photo.query.get(photo_id)
@@ -164,24 +177,44 @@ def get_photo(photo_id):
         photo_data = {
             "photo_id": photo.id,
             "photo_name": photo.photo_name,
+            "path": photo.path,
             "rotation": photo.rotation,
             "scaling": photo.scaling,
-            "window": {"x": photo.window_x, "y": photo.window_y}
+            "window": {"x": photo.window_x, "y": photo.window_y},
+            "split_screen": {
+                "x": photo.split_screen_x,
+                "y": photo.split_screen_y,
+                "width": photo.split_screen_width,
+                "height": photo.split_screen_height
+            }
         }
         return jsonify(photo_data)
     else:
         return jsonify({"error": "Photo not found"}), 404
 
-# API endpoint to upload a photo
 @app.route('/api/upload_photo', methods=['POST'])
 def upload_photo():
-    data = request.json
-    print(f"Uploading photo: {data}")
-    new_photo = Photo(photo_name=data['photo_name'], path=data['path'])
-    db.session.add(new_photo)
-    db.session.commit()
-    print(f"Photo uploaded: {new_photo.id}")
-    return jsonify({"success": True})
+    logging.debug('Upload photo endpoint called')
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        logging.debug(f'File saved to {filepath}')
+        new_photo = Photo(photo_name=filename, path=filepath)
+        db.session.add(new_photo)
+        db.session.commit()
+        logging.debug(f'New photo added to database with id {new_photo.id}')
+        return jsonify({"success": True, "photo_id": new_photo.id}), 201
+    return jsonify({"error": "File type not allowed"}), 400
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # API endpoint to save device configuration
 @app.route('/api/save_device_config', methods=['POST'])
@@ -196,6 +229,23 @@ def save_device_config():
         return jsonify({"success": True})
     else:
         return jsonify({"error": "Device not found"}), 404
+
+@app.route('/api/save_photo_config', methods=['POST'])
+def save_photo_config():
+    data = request.json
+    photo = Photo.query.get(data['photo_id'])
+    if photo:
+        photo.rotation = data['rotation']
+        photo.scaling = data['scaling']
+        photo.window_x = data['window']['x']
+        photo.window_y = data['window']['y']
+        photo.split_screen_x = data['split_screen']['x']
+        photo.split_screen_y = data['split_screen']['y']
+        photo.split_screen_width = data['split_screen']['width']
+        photo.split_screen_height = data['split_screen']['height']
+        db.session.commit()
+        return jsonify({"success": True})
+    return jsonify({"error": "Photo not found"}), 404
 
 # API endpoint to add photos to devices
 @app.route('/api/add_photos_to_devices', methods=['POST'])
@@ -263,6 +313,8 @@ def map_url():
 
 # Main function to run the application
 if __name__ == '__main__':
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     with app.app_context():
         db.create_all()
     app.run(debug=True, host='0.0.0.0')

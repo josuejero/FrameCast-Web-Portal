@@ -152,3 +152,7 @@ cython_debug/
 #.idea/
 
 node_modules/
+
+problem.py
+all_code.txt
+*.png
