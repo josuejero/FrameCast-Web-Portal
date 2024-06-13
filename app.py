@@ -6,13 +6,14 @@ import os
 import socket
 import netifaces as ni
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 
 # Initialize the Flask app
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 
 # Configuration for file uploads
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -51,27 +52,6 @@ class PhotoDevice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'), nullable=False)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'), nullable=False)
-
-# API endpoint to get simulated photo config
-@app.route('/api/simulated_photo_config', methods=['GET'])
-def get_simulated_photo_config():
-    simulated_response = {
-        "photo_id": 1,
-        "photo_name": "Simulated Photo",
-        "rotation": 0,
-        "scaling": 100,
-        "window": {"x": 0, "y": 0}
-    }
-    return jsonify(simulated_response)
-
-# API endpoint to get simulated photos
-@app.route('/api/simulated_photos', methods=['GET'])
-def get_simulated_photos():
-    simulated_photos = {
-        1: {"photo_name": "Photo1", "path": "path/to/photo1.jpg"},
-        2: {"photo_name": "Photo2", "path": "path/to/photo2.jpg"}
-    }
-    return jsonify(simulated_photos)
 
 # Function to get IP address
 def get_ip_address():
@@ -157,18 +137,20 @@ def enumerate_wifi_devices():
     return jsonify(devices_dict)
 
 # API endpoint to get all photos
+# ./app.py
+
 @app.route('/api/get_all_photos', methods=['GET'])
 def get_all_photos():
     photos = Photo.query.all()
-    photos_dict = {photo.id: {"photo_name": photo.photo_name, "path": photo.path} for photo in photos}
+    photos_dict = {photo.id: {"photo_name": photo.photo_name, "path": url_for('uploaded_file', filename=os.path.basename(photo.path))} for photo in photos}
     return jsonify(photos_dict)
 
-# API endpoint to get all devices
 @app.route('/api/get_all_devices', methods=['GET'])
 def get_all_devices():
     devices = Device.query.all()
     devices_dict = {device.id: {"device_name": device.device_name, "device_type": device.device_type, "status": device.status} for device in devices}
     return jsonify(devices_dict)
+
 
 @app.route('/api/get_photo/<photo_id>', methods=['GET'])
 def get_photo(photo_id):
@@ -177,7 +159,7 @@ def get_photo(photo_id):
         photo_data = {
             "photo_id": photo.id,
             "photo_name": photo.photo_name,
-            "path": photo.path,
+            "path": url_for('uploaded_file', filename=os.path.basename(photo.path)),
             "rotation": photo.rotation,
             "scaling": photo.scaling,
             "window": {"x": photo.window_x, "y": photo.window_y},
@@ -188,6 +170,7 @@ def get_photo(photo_id):
                 "height": photo.split_screen_height
             }
         }
+        logging.debug(f"Photo data: {photo_data}")
         return jsonify(photo_data)
     else:
         return jsonify({"error": "Photo not found"}), 404
@@ -196,9 +179,11 @@ def get_photo(photo_id):
 def upload_photo():
     logging.debug('Upload photo endpoint called')
     if 'file' not in request.files:
+        logging.error("No file part in the request")
         return jsonify({"error": "No file part"}), 400
     file = request.files['file']
     if file.filename == '':
+        logging.error("No selected file")
         return jsonify({"error": "No selected file"}), 400
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -210,6 +195,7 @@ def upload_photo():
         db.session.commit()
         logging.debug(f'New photo added to database with id {new_photo.id}')
         return jsonify({"success": True, "photo_id": new_photo.id}), 201
+    logging.error("File type not allowed")
     return jsonify({"error": "File type not allowed"}), 400
 
 @app.route('/uploads/<filename>')

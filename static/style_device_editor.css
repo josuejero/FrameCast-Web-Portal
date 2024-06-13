@@ -1,3 +1,5 @@
+/* ./static/style_device_editor.css */
+
 /* General styles for the body */
 body {
   font-family: 'Inter', sans-serif;
@@ -112,8 +114,8 @@ body {
 
 /* Preview image styles */
 .preview-image {
-  width: 100px;
-  height: 100px;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Preview section styles */
@@ -137,8 +139,7 @@ body {
   }
 
   .preview-image {
-    width: 80px;
-    height: 80px;
+    max-width: 80%;
   }
 }
 
@@ -162,8 +163,7 @@ body {
   }
 
   .preview-image {
-    width: 60px;
-    height: 60px;
+    max-width: 70%;
   }
 
   .action-button {
@@ -188,8 +188,7 @@ body {
   }
 
   .preview-image {
-    width: 50px;
-    height: 50px;
+    max-width: 60%;
   }
 
   .action-button {
