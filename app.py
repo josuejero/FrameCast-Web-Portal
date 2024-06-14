@@ -89,6 +89,31 @@ def device_editor():
 def photo_editor():
     return render_template('photo_editor.html')
 
+@app.route('/api/get_device/<device_id>', methods=['GET'])
+def get_device(device_id):
+    device = Device.query.get(device_id)
+    if device:
+        attached_photos = PhotoDevice.query.filter_by(device_id=device_id).all()
+        photos = [Photo.query.get(photo_device.photo_id) for photo_device in attached_photos]
+        photos_data = [
+            {
+                "photo_id": photo.id,
+                "photo_name": photo.photo_name,
+                "path": url_for('uploaded_file', filename=os.path.basename(photo.path))
+            } for photo in photos
+        ]
+        device_data = {
+            "device_id": device.id,
+            "device_name": device.device_name,
+            "photo_update_frequency": device.photo_update_frequency,
+            "random_order": device.random_order,
+            "photos": photos_data
+        }
+        return jsonify(device_data)
+    else:
+        return jsonify({"error": "Device not found"}), 404
+
+
 # API endpoint to find discoverable Bluetooth devices
 @app.route('/api/find_discoverable_bluetooth_devices', methods=['GET'])
 def find_discoverable_bluetooth_devices():

@@ -1,5 +1,3 @@
-<!-- ./templates/device_editor.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +25,7 @@
             </div>
             <div class="preview">
                 <h3>PREVIEW</h3>
-                <img src="path/to/your/image.jpg" alt="Preview" class="preview-image" id="photo-preview">
+                <div id="photo-previews"></div>
             </div>
         </section>
 
@@ -44,8 +42,11 @@
             <h2 class="section-title">DEVICE CONFIGURATION</h2>
             <div class="config-item">
                 <label for="device-name">Device Name:</label>
-                <input type="text" id="device-name" name="device-name">
+                <select id="device-name" name="device-name">
+                    <!-- Options will be dynamically populated here -->
+                </select>
             </div>
+        
             <div class="config-item">
                 <label for="photo-update-frequency">Photo Update Frequency (seconds):</label>
                 <input type="number" id="photo-update-frequency" name="photo-update-frequency" min="0" max="999">
@@ -65,11 +66,12 @@
                     <button class="action-button remove">REMOVE</button>
                 </div>
                 <div class="preview">
-                    <img src="path/to/your/image.jpg" alt="Preview" class="preview-image" id="assigned-photo-preview">
+                    <img src="" alt="Preview" class="preview-image" id="assigned-photo-preview">
                 </div>
             </div>
             <button class="action-button save-config">SAVE DEVICE CONFIGURATION</button>
         </section>
+        
     </main>
 
     <script src="{{ url_for('static', filename='device-editor-app.js') }}"></script>
