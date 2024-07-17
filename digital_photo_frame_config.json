@@ -1,0 +1,108 @@
+[
+    {
+        "Photo List": [
+            {
+                "Scaling": 50, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_1.jpg",
+                "Window": {
+                    "y": 100, 
+                    "x": 0
+                }
+            },
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_2.jpg",
+                "Window": {
+                    "y": 400, 
+                    "x": 50
+                }
+            },
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_3.jpg",
+                "Window": {
+                    "y": 450, 
+                    "x": 50
+                }
+            },
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_4.jpg",
+                "Window": {
+                    "y": 200, 
+                    "x": 55
+                }
+            }
+        ], 
+        "IP Address": "172.20.10.7", 
+        "Serial Number": "abc", 
+        "Connected": false, 
+        "Name": "Device 1", 
+        "MAC Address": "ABC", 
+        "Randomize": true, 
+        "Update Frequency": 3, 
+        "Type": "Principal", 
+        "Host Name": "Frame1"
+    },
+    {
+        "Photo List": [
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_5.jpg",
+                "Window": {
+                    "y": 456, 
+                    "x": 55
+                }
+            },
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_6.jpg",
+                "Window": {
+                    "y": 350, 
+                    "x": 55
+                }
+            },
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_7.jpg",
+                "Window": {
+                    "y": 150, 
+                    "x": 55
+                }
+            },
+            {
+                "Scaling": 75, 
+                "Unique ID": "1", 
+                "Rotation": 0, 
+                "Name": "photo_8.jpg",
+                "Window": {
+                    "y": 350, 
+                    "x": 55
+                }
+            }
+        ], 
+        "IP Address": "172.20.10.11", 
+        "Serial Number": "abc", 
+        "Connected": false, 
+        "Name": "Device 1", 
+        "MAC Address": "ABC", 
+        "Randomize": true, 
+        "Update Frequency": 3, 
+        "Type": "Agent", 
+        "Host Name": "Frame1"
+    }
+]

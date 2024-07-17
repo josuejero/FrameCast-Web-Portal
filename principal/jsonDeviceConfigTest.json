@@ -1,0 +1,26 @@
+[
+    {
+        "MAC Address": "ABC",
+        "Host Name": "Frame1",
+        "Serial Number": "abc",
+        "Name": "Device 1",
+        "Type": "Unassigned",
+        "IP Address": "0.0.0.0",
+        "Connected": false,
+        "Update Frequency": 15,
+        "Randomize": true,
+        "Photo List": ["Photo1.jpg","Photo2.jpg","Photo3.jpg"]
+    },
+    {
+        "MAC Address": "DEF",
+        "Host Name": "Frame2",
+        "Serial Number": "abc",
+        "Name": "Device 1",
+        "Type": "Unassigned",
+        "IP Address": "0.0.0.0",
+        "Connected": false,
+        "Update Frequency": 15,
+        "Randomize": true,
+        "Photo List": ["Photo4.jpg","Photo5.jpg","Photo6.jpg"]
+    }
+]

@@ -1,0 +1,82 @@
+[
+    {
+        "Scaling": 50, 
+        "Unique ID": "1", 
+        "Rotation": 0, 
+        "Name": "photo_1.jpg",
+        "Window": {
+            "y": 100, 
+            "x": 0
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "2", 
+        "Rotation": 0, 
+        "Name": "photo_2.jpg",
+        "Window": {
+            "y": 400, 
+            "x": 50
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "3", 
+        "Rotation": 0, 
+        "Name": "photo_3.jpg",
+        "Window": {
+            "y": 450, 
+            "x": 50
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "4", 
+        "Rotation": 0, 
+        "Name": "photo_4.jpg",
+        "Window": {
+            "y": 200, 
+            "x": 55
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "5", 
+        "Rotation": 0, 
+        "Name": "photo_5.jpg",
+        "Window": {
+            "y": 456, 
+            "x": 55
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "6", 
+        "Rotation": 0, 
+        "Name": "photo_6.jpg",
+        "Window": {
+            "y": 350, 
+            "x": 55
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "7", 
+        "Rotation": 0, 
+        "Name": "photo_7.jpg",
+        "Window": {
+            "y": 150, 
+            "x": 55
+        }
+    },
+    {
+        "Scaling": 75, 
+        "Unique ID": "8", 
+        "Rotation": 0, 
+        "Name": "photo_8.jpg",
+        "Window": {
+            "y": 350, 
+            "x": 55
+        }
+    }
+]

@@ -1,0 +1,50 @@
+[
+    {
+        "MAC Address": "NA",
+        "Host Name": "FrameCast-v0-Principal-00001",
+        "Serial Number": "00001",
+        "Name": "My Frame 1",
+        "Type": "Principal",
+        "IP Address": "192.168.1.46",
+        "Connected": false,
+        "Update Frequency": "5",
+        "Randomize": false,
+        "Photo List": [
+            "mpBSMKE4D8.jpg",
+            "Pkroj66an4.jpg",
+            "fS62c2xUWT.jpg"
+        ]
+    },
+    {
+        "MAC Address": "2c:cf:67:21:6e:5a",
+        "Host Name": "FrameCast-v0-Agent-00002",
+        "Serial Number": "00002",
+        "Name": "My Frame 2",
+        "Type": "Agent",
+        "IP Address": "192.168.1.26",
+        "Connected": false,
+        "Update Frequency": "5",
+        "Randomize": false,
+        "Photo List": [
+            "FvcNHSlZ7N.jpg",
+            "VMNx4GiCdR.jpg",
+            "iCX17AHy6U.jpg"
+        ]
+    },
+    {
+        "MAC Address": "b8:27:eb:37:72:b4",
+        "Host Name": "FrameCast-v0-Agent-00003",
+        "Serial Number": "00003",
+        "Name": "My Frame 3",
+        "Type": "Agent",
+        "IP Address": "192.168.1.35",
+        "Connected": false,
+        "Update Frequency": "5",
+        "Randomize": false,
+        "Photo List": [
+            "JFXmfbO2Us.jpg",
+            "pVjzOkvFUI.jpg",
+            "kIq6e2IxYh.jpg"
+        ]
+    }
+]

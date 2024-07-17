@@ -1,0 +1,26 @@
+[
+    {
+        "MAC Address": "NA",
+        "Host Name": "DPF-Eco-Principal-00001",
+        "Serial Number": "00001",
+        "Name": "My New Device (S/N: 00001)",
+        "Type": "Principal",
+        "IP Address": "192.168.1.21",
+        "Connected": true,
+        "Update Frequency": 15,
+        "Randomize": true,
+        "Photo List": []
+    },
+    {
+        "MAC Address": "b8:27:eb:7e:ce:7b",
+        "Host Name": "DPF-Eco-Agent-00002",
+        "Serial Number": "00002",
+        "Name": "My New Device (S/N: 00002)",
+        "Type": "Agent",
+        "IP Address": "192.168.1.26",
+        "Connected": true,
+        "Update Frequency": 15,
+        "Randomize": true,
+        "Photo List": []
+    }
+]

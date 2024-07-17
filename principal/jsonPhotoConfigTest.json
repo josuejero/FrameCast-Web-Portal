@@ -1,0 +1,32 @@
+[
+    {
+        "Unique ID": "1",
+        "Name": "Photo1.jpg",
+        "Rotation": 0,
+        "Scaling": 100,
+        "Window": {
+            "x": 0,
+            "y": 0
+        }
+    },
+    {
+        "Unique ID": "2",
+        "Name": "Photo1.jpg",
+        "Rotation": 0,
+        "Scaling": 100,
+        "Window": {
+            "x": 0,
+            "y": 0
+        }
+    },
+    {
+        "Unique ID": "3",
+        "Name": "Photo1.jpg",
+        "Rotation": 0,
+        "Scaling": 100,
+        "Window": {
+            "x": 0,
+            "y": 0
+        }
+    }
+]
