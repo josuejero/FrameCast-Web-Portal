@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for character encoding and viewport configuration -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Link to Google Fonts for 'Inter' font family -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap">
+    
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    
+    <!-- Page title -->
+    <title>Digital Photo Frame Ecosystem</title>
+</head>
+<body>
+    <!-- Navbar section for navigation -->
+    <header class="navbar">
+        <a href="/" class="navbar-item highlight">DEVICE MANAGER</a>
+        <a href="/device-editor" class="navbar-item">DEVICE EDITOR</a>
+        <a href="/photo-editor" class="navbar-item">PHOTO EDITOR</a>
+    </header>
+
+    <!-- Main content area -->
+    <main class="main-content">
+        <!-- Discovered devices section -->
+        <section class="devices-section">
+            <h2 class="section-title">DISCOVERED DEVICES</h2>
+            <div id="discovered-devices" class="device-list"></div>
+            <button class="action-button" onclick="findNewDevices()">FIND NEW DEVICES</button>
+            <button class="action-button" onclick="inviteToNetwork()">INVITE TO NETWORK</button>
+        </section>
+
+        <!-- Networked devices section -->
+        <section class="devices-section">
+            <h2 class="section-title">NETWORKED DEVICES</h2>
+            <div class="device-list-header">
+                <p>Device Name</p>
+                <p>Device Type</p>
+                <p>Status</p>
+                <p>IP Address</p>
+            </div>
+            <div id="networked-devices" class="device-list"></div>
+        </section>
+    </main>
+
+    <!-- Link to external JavaScript file for interactivity -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

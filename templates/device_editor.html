@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_device_editor.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Device Editor</title>
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="/" class="navbar-item">DEVICE MANAGER</a>
+        <a href="/device-editor" class="navbar-item highlight">DEVICE EDITOR</a>
+        <a href="/photo-editor" class="navbar-item">PHOTO EDITOR</a>
+    </header>
+
+    <main class="main-content">
+        <section class="photo-list-section">
+            <h2 class="section-title">PHOTOS</h2>
+            <div class="photo-list" id="photo-list">
+                <!-- Photos will be dynamically populated here -->
+            </div>
+            <div class="preview">
+                <h3>PREVIEW</h3>
+                <div id="photo-previews"></div>
+            </div>
+        </section>
+
+        <button class="action-button add-to-devices">ADD TO DEVICES</button>
+
+        <section class="device-list-section">
+            <h2 class="section-title">DEVICES</h2>
+            <div class="device-list" id="device-list">
+                <!-- Devices will be dynamically populated here -->
+            </div>
+        </section>
+
+        <section class="device-config-pane">
+            <h2 class="section-title">DEVICE CONFIGURATION</h2>
+            <div class="config-item">
+                <label for="device-name">Device Name:</label>
+                <select id="device-name" name="device-name">
+                    <!-- Options will be dynamically populated here -->
+                </select>
+            </div>
+        
+            <div class="config-item">
+                <label for="photo-update-frequency">Photo Update Frequency (seconds):</label>
+                <input type="number" id="photo-update-frequency" name="photo-update-frequency" min="0" max="999">
+            </div>
+            <div class="config-item">
+                <label for="random-order">Randomize Order:</label>
+                <input type="checkbox" id="random-order" name="random-order">
+            </div>
+            <div class="config-item">
+                <h3>PAIRED PHOTOS</h3>
+                <div class="assigned-photo-list" id="assigned-photo-list">
+                    <!-- Paired photos will be dynamically populated here -->
+                </div>
+                <div class="button-group">
+                    <button class="action-button move-up">MOVE UP</button>
+                    <button class="action-button move-down">MOVE DOWN</button>
+                    <button class="action-button remove">REMOVE</button>
+                </div>
+                <div class="preview">
+                    <img src="" alt="Preview" class="preview-image" id="assigned-photo-preview">
+                </div>
+            </div>
+            <button class="action-button save-config">SAVE DEVICE CONFIGURATION</button>
+        </section>
+        
+    </main>
+
+    <script src="{{ url_for('static', filename='device-editor-app.js') }}"></script>
+</body>
+
+</html>
